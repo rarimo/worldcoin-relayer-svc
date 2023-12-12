@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/rarimo/identity-relayer-svc/internal/cli"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/cli"
 )
 
 func main() {

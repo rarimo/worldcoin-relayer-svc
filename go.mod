@@ -1,4 +1,4 @@
-module github.com/rarimo/identity-relayer-svc
+module github.com/rarimo/worldcoin-relayer-svc
 
 go 1.19
 
@@ -6,7 +6,7 @@ require (
 	github.com/alecthomas/kingpin v2.2.6+incompatible
 	github.com/cosmos/cosmos-sdk v0.46.12
 	github.com/ethereum/go-ethereum v1.10.26
-	github.com/rarimo/rarimo-core v1.0.7-0.20231123231906-566dc0033e75
+	github.com/rarimo/rarimo-core v1.0.7-0.20231208125434-eaf4ddf6c070
 	github.com/spf13/cast v1.5.1
 	github.com/stretchr/testify v1.8.3 // indirect
 	github.com/tendermint/tendermint v0.34.27

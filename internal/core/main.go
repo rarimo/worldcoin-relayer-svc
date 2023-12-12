@@ -8,8 +8,8 @@ import (
 
 	"github.com/ava-labs/subnet-evm/accounts/abi"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/rarimo/identity-relayer-svc/internal/config"
 	rarimocore "github.com/rarimo/rarimo-core/x/rarimocore/types"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/config"
 	"gitlab.com/distributed_lab/logan/v3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
@@ -60,46 +60,12 @@ func (c *Core) GetIdentityStateTransferProof(ctx context.Context, operationID st
 		return nil, errors.Wrap(err, "failed to get the operation")
 	}
 
-	transfer, err := pkg.GetIdentityStateTransfer(operation.Operation)
+	transfer, err := pkg.GetWorldCoinIdentityTransfer(operation.Operation)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse operation details")
 	}
 
 	result := IdentityStateTransferDetails{Operation: transfer}
-
-	result.Proof, err = proofArgs.Pack(pathHashes, signature)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to encode the proof")
-	}
-
-	return &result, nil
-}
-
-func (c *Core) GetIdentityGISTTransferProof(ctx context.Context, operationID string) (*IdentityGISTTransferDetails, error) {
-	proof, err := c.core.OperationProof(ctx, &rarimocore.QueryGetOperationProofRequest{Index: operationID})
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to get the operation proof")
-	}
-
-	pathHashes := make([]common.Hash, 0, len(proof.Path))
-	for _, p := range proof.Path {
-		pathHashes = append(pathHashes, common.HexToHash(p))
-	}
-
-	signature := hexutil.MustDecode(proof.Signature)
-	signature[64] += 27
-
-	operation, err := c.core.Operation(context.TODO(), &rarimocore.QueryGetOperationRequest{Index: operationID})
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to get the operation")
-	}
-
-	transfer, err := pkg.GetIdentityGISTTransfer(operation.Operation)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to parse operation details")
-	}
-
-	result := IdentityGISTTransferDetails{Operation: transfer}
 
 	result.Proof, err = proofArgs.Pack(pathHashes, signature)
 	if err != nil {

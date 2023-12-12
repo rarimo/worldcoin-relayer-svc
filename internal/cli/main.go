@@ -3,10 +3,10 @@ package cli
 import (
 	"context"
 
-	"github.com/rarimo/identity-relayer-svc/internal/services"
-	"github.com/rarimo/identity-relayer-svc/internal/services/ingester"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/services"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/services/ingester"
 
-	"github.com/rarimo/identity-relayer-svc/internal/config"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/config"
 
 	"github.com/alecthomas/kingpin"
 	"gitlab.com/distributed_lab/kit/kv"
@@ -46,7 +46,6 @@ func Run(args []string) bool {
 	switch cmd {
 	case runAllCmd.FullCommand():
 		go ingester.NewService(cfg, ingester.NewStateIngester(cfg)).Run(ctx)
-		go ingester.NewService(cfg, ingester.NewGistIngester(cfg)).Run(ctx)
 		err = services.NewServer(cfg).Run()
 	case migrateUpCmd.FullCommand():
 		err = MigrateUp(cfg)

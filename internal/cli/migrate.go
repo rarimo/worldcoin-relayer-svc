@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/rarimo/identity-relayer-svc/internal/assets"
-	"github.com/rarimo/identity-relayer-svc/internal/config"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/assets"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/config"
 	migrate "github.com/rubenv/sql-migrate"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )

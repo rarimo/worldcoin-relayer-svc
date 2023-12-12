@@ -7,7 +7,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/rarimo/identity-relayer-svc/internal/data"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/data"
 	"gitlab.com/distributed_lab/kit/pgdb"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
