@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/integrations/relayer/state/relay": {
+    "/integrations/relayer-wc/state/relay": {
       "post": {
         "operationId": "Service_StateRelay",
         "responses": {
@@ -48,7 +48,7 @@
         ]
       }
     },
-    "/integrations/relayer/state/relay/{hash}": {
+    "/integrations/relayer-wc/state/relay/{hash}": {
       "get": {
         "operationId": "Service_StateRelays",
         "responses": {

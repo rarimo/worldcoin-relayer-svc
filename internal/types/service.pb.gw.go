@@ -131,7 +131,7 @@ func RegisterServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, se
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Service/StateRelay", runtime.WithHTTPPathPattern("/integrations/relayer/state/relay"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Service/StateRelay", runtime.WithHTTPPathPattern("/integrations/relayer-wc/state/relay"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -156,7 +156,7 @@ func RegisterServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, se
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Service/StateRelays", runtime.WithHTTPPathPattern("/integrations/relayer/state/relay/{hash}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/.Service/StateRelays", runtime.WithHTTPPathPattern("/integrations/relayer-wc/state/relay/{hash}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -220,7 +220,7 @@ func RegisterServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Service/StateRelay", runtime.WithHTTPPathPattern("/integrations/relayer/state/relay"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Service/StateRelay", runtime.WithHTTPPathPattern("/integrations/relayer-wc/state/relay"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -242,7 +242,7 @@ func RegisterServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Service/StateRelays", runtime.WithHTTPPathPattern("/integrations/relayer/state/relay/{hash}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/.Service/StateRelays", runtime.WithHTTPPathPattern("/integrations/relayer-wc/state/relay/{hash}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -262,9 +262,9 @@ func RegisterServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 }
 
 var (
-	pattern_Service_StateRelay_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"integrations", "relayer", "state", "relay"}, ""))
+	pattern_Service_StateRelay_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"integrations", "relayer-wc", "state", "relay"}, ""))
 
-	pattern_Service_StateRelays_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"integrations", "relayer", "state", "relay", "hash"}, ""))
+	pattern_Service_StateRelays_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"integrations", "relayer-wc", "state", "relay", "hash"}, ""))
 )
 
 var (
