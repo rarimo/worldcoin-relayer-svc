@@ -123,8 +123,8 @@ func (c *Service) processIdentityStateTransfer(ctx context.Context, chain *confi
 		return "", errors.Wrap(err, "failed to create contract instance")
 	}
 
-	prevRoot, _ := new(big.Int).SetString(details.Operation.PrevState, 10)
-	root, _ := new(big.Int).SetString(details.Operation.State, 10)
+	prevRoot := new(big.Int).SetBytes(hexutil.MustDecode(details.Operation.PrevState))
+	root := new(big.Int).SetBytes(hexutil.MustDecode(details.Operation.State))
 	timestamp, _ := new(big.Int).SetString(details.Operation.Timestamp, 10)
 
 	tx, err := contract.SignedTransitRoot(opts, prevRoot, root, timestamp, details.Proof)
