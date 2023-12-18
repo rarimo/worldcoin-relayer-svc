@@ -16,69 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/integrations/relayer/gist/relay": {
-      "post": {
-        "operationId": "Service_GistRelay",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/MsgRelayResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/RelayBody"
-            }
-          }
-        ],
-        "tags": [
-          "Service"
-        ]
-      }
-    },
-    "/integrations/relayer/gist/relay/{hash}": {
-      "get": {
-        "operationId": "Service_GISTRelays",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/MsgRelaysResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "hash",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Service"
-        ]
-      }
-    },
-    "/integrations/relayer/state/relay": {
+    "/integrations/relayer-wc/state/relay": {
       "post": {
         "operationId": "Service_StateRelay",
         "responses": {
@@ -110,7 +48,7 @@
         ]
       }
     },
-    "/integrations/relayer/state/relay/{hash}": {
+    "/integrations/relayer-wc/state/relay/{hash}": {
       "get": {
         "operationId": "Service_StateRelays",
         "responses": {

@@ -5,12 +5,9 @@
 The Relayer service as a part of Rarimo cross-chain system designed to finalize transferring flow by submitting final
 transaction to the target chain.
 
-The goal of identity relayer is to observe and fetch information about new signatures for
-`IDENTITY_STATE_TRANSFER` and `IDENTITY_GIST_TRANSFER` operations and after submit the state transit transactions to
-configured EVM chain by request.
-
-For more information about how the PolygonID identity transfer works
-visit: [rarimo-core docs](https://rarimo.github.io/rarimo-core/docs/common/bridging/002-identity.html).
+The goal of WorldCoin identity relayer is to observe and fetch information about new signatures
+for `WORLDCOIN_IDENTITY_TRANSFER` operations and after submit the state transit transactions to configured EVM chain by
+request.
 
 ----
 
@@ -128,16 +125,6 @@ volumes:
 {
   "chain": "The name of chain submit to according to the service configuration",
   "hash": "The state hash (the same as on state contract) in 0x... hex format",
-  "waitConfirm": true
-}
-```
-
-2. Execute the POST `/integrations/relayer/gist/relay` request with the following body to perform gist publishing:
-
-```json
-{
-  "chain": "The name of chain submit to according to the service configuration",
-  "hash": "The GIST hash (the same as on state contract) in 0x... hex format",
   "waitConfirm": true
 }
 ```

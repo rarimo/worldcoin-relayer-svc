@@ -6,11 +6,11 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/rarimo/identity-relayer-svc/docs"
-	"github.com/rarimo/identity-relayer-svc/internal/config"
-	"github.com/rarimo/identity-relayer-svc/internal/data/pg"
-	"github.com/rarimo/identity-relayer-svc/internal/services/relayer"
-	"github.com/rarimo/identity-relayer-svc/internal/types"
+	"github.com/rarimo/worldcoin-relayer-svc/docs"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/config"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/data/pg"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/services/relayer"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/types"
 	"gitlab.com/distributed_lab/logan/v3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 	"google.golang.org/grpc/codes"
@@ -79,61 +79,8 @@ func (s *ServerImpl) StateRelay(ctx context.Context, req *types.MsgStateRelayReq
 	return &types.MsgRelayResponse{Tx: tx}, nil
 }
 
-func (s *ServerImpl) GistRelay(ctx context.Context, req *types.MsgGISTRelayRequest) (*types.MsgRelayResponse, error) {
-	if req.Body == nil {
-		return nil, status.Errorf(codes.InvalidArgument, "empty body")
-	}
-
-	s.log.Infof("Relay request: GIST - %s; chain - %s", req.Body.Hash, req.Body.Chain)
-
-	tx, err := s.relayer.GistRelay(ctx, req.Body.Hash, req.Body.Chain, req.Body.WaitConfirm)
-
-	if err != nil {
-		s.log.WithError(err).Debugf("Request failed")
-
-		switch errors.Cause(err) {
-		case relayer.ErrEntryNotFound, relayer.ErrChainNotFound:
-			return nil, status.Errorf(codes.NotFound, err.Error())
-		case relayer.ErrAlreadySubmitted:
-			return nil, status.Errorf(
-				codes.InvalidArgument,
-				"can not resubmit state transition tx for state: %s on chain: %s", req.Body.Hash, req.Body.Chain,
-			)
-		default:
-			s.log.WithError(err).Error("Got internal error while processing relay request")
-			return nil, status.Errorf(codes.Internal, "Internal error")
-		}
-	}
-
-	return &types.MsgRelayResponse{Tx: tx}, nil
-}
-
 func (s *ServerImpl) StateRelays(ctx context.Context, req *types.MsgRelaysRequest) (*types.MsgRelaysResponse, error) {
 	relays, err := s.relayer.StateRelays(ctx, req.Hash)
-	if err != nil {
-		switch errors.Cause(err) {
-		case relayer.ErrEntryNotFound:
-			return nil, status.Errorf(codes.NotFound, err.Error())
-		default:
-			s.log.WithError(err).Error("got internal error while processing relay request")
-			return nil, status.Errorf(codes.Internal, "Internal error")
-		}
-	}
-
-	resp := &types.MsgRelaysResponse{Relays: make([]*types.Transition, 0, len(relays))}
-
-	for _, r := range relays {
-		resp.Relays = append(resp.Relays, &types.Transition{
-			Chain: r.Chain,
-			Tx:    r.Tx,
-		})
-	}
-
-	return resp, nil
-}
-
-func (s *ServerImpl) GistRelays(ctx context.Context, req *types.MsgRelaysRequest) (*types.MsgRelaysResponse, error) {
-	relays, err := s.relayer.GistRelays(ctx, req.Hash)
 	if err != nil {
 		switch errors.Cause(err) {
 		case relayer.ErrEntryNotFound:

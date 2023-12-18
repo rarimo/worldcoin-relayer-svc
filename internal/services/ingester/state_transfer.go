@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/rarimo/identity-relayer-svc/internal/config"
-	"github.com/rarimo/identity-relayer-svc/internal/data"
-	"github.com/rarimo/identity-relayer-svc/internal/data/pg"
 	"github.com/rarimo/rarimo-core/x/rarimocore/crypto/pkg"
 	rarimocore "github.com/rarimo/rarimo-core/x/rarimocore/types"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/config"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/data"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/data/pg"
 	"gitlab.com/distributed_lab/logan/v3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
@@ -17,28 +17,15 @@ type stateIngester struct {
 	log        *logan.Entry
 	rarimocore rarimocore.QueryClient
 	storage    *pg.Storage
-	filter     func(string) bool
 }
 
 var _ Processor = &stateIngester{}
 
 func NewStateIngester(cfg config.Config) Processor {
-	filtrationDisabled := cfg.Relay().DisableFiltration
-	allowList := mp(cfg.Relay().IssuerID)
-
-	filter := func(id string) bool {
-		if filtrationDisabled {
-			return true
-		}
-		_, ok := allowList[id]
-		return ok
-	}
-
 	return &stateIngester{
 		log:        cfg.Log(),
 		rarimocore: rarimocore.NewQueryClient(cfg.Cosmos()),
 		storage:    pg.New(cfg.DB()),
-		filter:     filter,
 	}
 }
 
@@ -47,7 +34,7 @@ func (s *stateIngester) query() string {
 }
 
 func (s *stateIngester) name() string {
-	return "identity-state-ingester"
+	return "worldcoin-identity-state-ingester"
 }
 
 func (s *stateIngester) catchup(ctx context.Context) error {
@@ -63,7 +50,7 @@ func (s *stateIngester) catchup(ctx context.Context) error {
 		}
 
 		for _, op := range operations.Operation {
-			if op.Status == rarimocore.OpStatus_SIGNED && op.OperationType == rarimocore.OpType_IDENTITY_DEFAULT_TRANSFER {
+			if op.Status == rarimocore.OpStatus_SIGNED && op.OperationType == rarimocore.OpType_WORLDCOIN_IDENTITY_TRANSFER {
 				if err := s.trySave(ctx, op); err != nil {
 					return err
 				}
@@ -109,28 +96,23 @@ func (s *stateIngester) process(
 }
 
 func (s *stateIngester) trySave(ctx context.Context, operation rarimocore.Operation) error {
-	if operation.OperationType == rarimocore.OpType_IDENTITY_STATE_TRANSFER {
+	if operation.OperationType == rarimocore.OpType_WORLDCOIN_IDENTITY_TRANSFER {
 		s.log.WithField("operation_index", operation.Index).Info("Trying to save op")
 
-		op, err := pkg.GetIdentityStateTransfer(operation)
+		op, err := pkg.GetWorldCoinIdentityTransfer(operation)
 		if err != nil {
-			return errors.Wrap(err, "failed to parse identity default transfer", logan.F{
+			return errors.Wrap(err, "failed to parse worldcoin identity transfer", logan.F{
 				"operation_index": operation.Index,
 			})
 		}
 
-		if !s.filter(op.Id) {
-			s.log.WithField("operation_index", operation.Index).Info("Issuer ID is not supported")
-			return nil
-		}
-
 		err = s.storage.StateQ().UpsertCtx(ctx, &data.State{
-			ID:        op.StateHash,
+			ID:        op.State,
 			Operation: operation.Index,
 		})
 
 		if err != nil {
-			return errors.Wrap(err, "failed to upsert identity default transfer", logan.F{
+			return errors.Wrap(err, "failed to upsert worldcoin  identity transfer", logan.F{
 				"operation_index": operation.Index,
 			})
 		}

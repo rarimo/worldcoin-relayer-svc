@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rarimo/identity-relayer-svc/internal/config"
 	rarimocore "github.com/rarimo/rarimo-core/x/rarimocore/types"
+	"github.com/rarimo/worldcoin-relayer-svc/internal/config"
 	"github.com/tendermint/tendermint/rpc/client/http"
 	"gitlab.com/distributed_lab/logan/v3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
@@ -14,8 +14,7 @@ import (
 )
 
 const (
-	stateQuery = "tm.event='Tx' AND operation_signed.operation_type='IDENTITY_STATE_TRANSFER'"
-	gistQuery  = "tm.event='Tx' AND operation_signed.operation_type='IDENTITY_GIST_TRANSFER'"
+	stateQuery = "tm.event='Tx' AND operation_signed.operation_type='WORLDCOIN_IDENTITY_TRANSFER'"
 )
 
 type Service struct {
