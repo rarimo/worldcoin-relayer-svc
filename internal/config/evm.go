@@ -38,6 +38,7 @@ type EVMChain struct {
 	RPC                 *ethclient.Client `fig:"-"`
 	RPCURL              string            `fig:"rpc,required"`
 	ChainID             *big.Int          `fig:"chain_id,required"`
+	AllowResubmit       bool              `fig:"allow_resubmit"`
 }
 
 func NewEVMer(getter kv.Getter) EVMer {

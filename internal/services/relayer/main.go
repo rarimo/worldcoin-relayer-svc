@@ -72,8 +72,10 @@ func (c *Service) StateRelay(ctx context.Context, state string, chainName string
 		return "", ErrEntryNotFound
 	}
 
-	if err := c.checkTransitionNotExist(ctx, state, chainName); err != nil {
-		return "", err
+	if !chain.AllowResubmit {
+		if err := c.checkTransitionNotExist(ctx, state, chainName); err != nil {
+			return "", err
+		}
 	}
 
 	return c.processIdentityStateTransfer(ctx, chain, entry, waitTxConfirm)
