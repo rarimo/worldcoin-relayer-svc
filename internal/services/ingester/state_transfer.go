@@ -14,18 +14,20 @@ import (
 )
 
 type stateIngester struct {
-	log        *logan.Entry
-	rarimocore rarimocore.QueryClient
-	storage    *pg.Storage
+	log            *logan.Entry
+	rarimocore     rarimocore.QueryClient
+	storage        *pg.Storage
+	sourceContract string
 }
 
 var _ Processor = &stateIngester{}
 
 func NewStateIngester(cfg config.Config) Processor {
 	return &stateIngester{
-		log:        cfg.Log(),
-		rarimocore: rarimocore.NewQueryClient(cfg.Cosmos()),
-		storage:    pg.New(cfg.DB()),
+		log:            cfg.Log(),
+		rarimocore:     rarimocore.NewQueryClient(cfg.Cosmos()),
+		storage:        pg.New(cfg.DB()),
+		sourceContract: cfg.Relay().SourceContract,
 	}
 }
 
@@ -104,6 +106,11 @@ func (s *stateIngester) trySave(ctx context.Context, operation rarimocore.Operat
 			return errors.Wrap(err, "failed to parse worldcoin identity transfer", logan.F{
 				"operation_index": operation.Index,
 			})
+		}
+
+		if op.Contract != s.sourceContract {
+			s.log.WithField("operation_index", operation.Index).Info("Invalid state contract. Skipping")
+			return nil
 		}
 
 		err = s.storage.StateQ().UpsertCtx(ctx, &data.State{
